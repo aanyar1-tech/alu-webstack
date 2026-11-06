@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2086
 # Bash script that audits domain subdomains using dig and awk
+# shellcheck disable=SC2086
 
 audit_subdomain() {
     local sub=$1
