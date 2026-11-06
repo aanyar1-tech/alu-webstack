@@ -5,7 +5,7 @@
 audit_subdomain() {
     local sub=$1
     local dom=$2
-    dig "$sub.$dom" A +noall +answer | awk -v s="$sub" '{print "The subdomain " s " is a " $4 " record and points to " $5}'
+    dig "$sub.$dom" A +noall +answer | awk -v s="$sub" '$4=="A" {print "The subdomain " s " is a " $4 " record and points to " $5}'
 }
 
 DOMAIN=$1
