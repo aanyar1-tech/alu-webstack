@@ -1,24 +1,20 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2086
-# Audit domain subdomains and display their record types and destination IPs
+# Bash script that audits domain subdomains using dig and awk
 
 audit_subdomain() {
     local sub=$1
     local dom=$2
-    local record_info
-    record_info=$(dig +noall +answer ${sub}.${dom} | awk '{print $4, $5}' | head -n 1)
-    local record_type=$(echo $record_info | awk '{print $1}')
-    local destination=$(echo $record_info | awk '{print $2}')
-    echo "The subdomain ${sub} is a ${record_type} record and points to ${destination}"
+    dig "$sub.$dom" A +noall +answer | awk -v s="$sub" '{print "The subdomain " s " is a " $4 " record and points to " $5}'
 }
 
-domain=$1
-subdomain=$2
+DOMAIN=$1
+SUBDOMAIN=$2
 
-if [ -n "$subdomain" ]; then
-    audit_subdomain "$subdomain" "$domain"
+if [ -n "$SUBDOMAIN" ]; then
+    audit_subdomain "$SUBDOMAIN" "$DOMAIN"
 else
     for sub in www lb-01 web-01 web-02; do
-        audit_subdomain "$sub" "$domain"
+        audit_subdomain "$sub" "$DOMAIN"
     done
 fi
